@@ -2,54 +2,29 @@
  * Refactored version of the "Messy React" WalletPage.
  *
  * Mapping to the issues listed in ../REVIEW.md:
- * - WalletBalance gains `blockchain` (issue 2).
- * - Priority table lives outside the component (issues 3-typo, 10, 13).
- * - One memo with correct dependencies formats rows once (issues 4, 6, 11).
- * - Filter keeps positive balances only (issue 5).
- * - Comparator always returns a number, ties broken deterministically (issues 3, 7).
- * - Missing prices guarded with Number.isFinite (issue 8).
- * - Explicit number formatting instead of bare toFixed() (issue 9).
+ * - WalletBalance.blockchain added to the interface (issue 2).
+ * - Priority table + filtering/sorting/formatting extracted to
+ *   lib/balances.ts, outside the component (issues 3-typo, 5, 7, 8, 9,
+ *   10, 13) — each corrected defect has a regression test in
+ *   lib/balances.test.ts.
+ * - One memo with correct dependencies (issues 4, 6, 11).
  * - Stable keys instead of the array index (issue 12).
  * - Explicit prop types; hooks stay at the app level and feed props in
  *   (issues 14, 15 — keeps this component trivially testable).
  */
 import React from 'react';
+import {
+  formatBalances,
+  type FormattedWalletBalance,
+  type WalletBalance,
+} from './lib/balances';
 
-export interface WalletBalance {
-  blockchain: string;
-  currency: string;
-  amount: number;
-}
-
-export interface FormattedWalletBalance extends WalletBalance {
-  formatted: string;
-  /** USD value, or null when the token has no known price. */
-  usdValue: number | null;
-}
-
-/** Unknown blockchains sort last. */
-const UNKNOWN_PRIORITY = -99;
-
-const BLOCKCHAIN_PRIORITY: Record<string, number> = {
-  Osmosis: 100,
-  Ethereum: 50,
-  Arbitrum: 30,
-  Zilliqa: 20,
-  Neo: 20,
-};
-
-function getPriority(blockchain: string): number {
-  return BLOCKCHAIN_PRIORITY[blockchain] ?? UNKNOWN_PRIORITY;
-}
+export type { FormattedWalletBalance, WalletBalance };
 
 const usdFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
   maximumFractionDigits: 2,
-});
-
-const amountFormatter = new Intl.NumberFormat('en-US', {
-  maximumFractionDigits: 8,
 });
 
 interface WalletRowProps {
@@ -77,30 +52,12 @@ export interface WalletPageProps {
 }
 
 export function WalletPage({ balances, prices }: WalletPageProps): React.ReactElement {
-  const rows = React.useMemo<FormattedWalletBalance[]>(() => {
-    return balances
-      .filter((balance) => {
-        const priority = getPriority(balance.blockchain);
-        return priority > UNKNOWN_PRIORITY && balance.amount > 0;
-      })
-      .sort((lhs, rhs) => {
-        const priorityDiff = getPriority(rhs.blockchain) - getPriority(lhs.blockchain);
-        if (priorityDiff !== 0) return priorityDiff;
-        return lhs.currency.localeCompare(rhs.currency);
-      })
-      .map<FormattedWalletBalance>((balance) => {
-        const price = prices[balance.currency];
-        const usdValue =
-          typeof price === 'number' && Number.isFinite(price)
-            ? price * balance.amount
-            : null;
-        return {
-          ...balance,
-          formatted: amountFormatter.format(balance.amount),
-          usdValue,
-        };
-      });
-  }, [balances, prices]);
+  // Single memo; deps [balances, prices] are both actually used (issue 6).
+  // Filtering/sorting/formatting logic lives in lib/balances.ts (issues 5, 7, 8, 9).
+  const rows = React.useMemo<FormattedWalletBalance[]>(
+    () => formatBalances(balances, prices),
+    [balances, prices],
+  );
 
   return (
     <div className="wallet-page">

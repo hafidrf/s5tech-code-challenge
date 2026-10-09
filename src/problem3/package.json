@@ -3,11 +3,14 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "node --import tsx --test src/lib/*.test.ts"
   },
   "devDependencies": {
+    "@types/node": "^22.10.0",
     "@types/react": "^19.0.0",
     "react": "^19.0.0",
+    "tsx": "^4.19.2",
     "typescript": "^5.7.2"
   }
 }

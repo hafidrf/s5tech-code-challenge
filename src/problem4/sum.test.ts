@@ -16,8 +16,10 @@ for (const [name, fn] of Object.entries(implementations)) {
     assert.equal(fn(100), 5050);
   });
 
-  test(`${name}: zero input`, () => {
+  test(`${name}: zero and negative inputs (empty-sum convention)`, () => {
     assert.equal(fn(0), 0);
+    assert.equal(fn(-1), 0);
+    assert.equal(fn(-42), 0);
   });
 
   // sum_to_n_c is tail-recursive without TCO in V8; keep the deep-recursion

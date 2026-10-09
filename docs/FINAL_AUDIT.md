@@ -87,13 +87,23 @@ Statuses: **PASS** (implemented + verified by execution), **FAIL**, **BLOCKED**,
 | A-2 | P3 (false positive) | Suspected dev SQLite files were committed; verified with `git ls-files` + `git check-ignore` that they were never tracked and are ignored by `src/problem5/.gitignore` | No action needed — recorded to prevent re-litigation |
 | A-3 | P3 (docs) | No `.env.example` for the backend | Added `src/problem5/.env.example` (+ README pointer); P5 typecheck & tests re-run green |
 
+### Addendum — six-problem completion pass (same day)
+
+| ID | Severity | Finding | Resolution |
+| --- | --- | --- | --- |
+| B-1 | P2 (correctness vs spec) | P1/P4 spec says input is "any integer", but the three implementations disagreed for `n < 0` (closed form returned positive values, loops returned 0). Cross-implementation agreement was only documented for `n >= 0` | Adopted the empty-sum convention `n <= 0 → 0` in all three implementations (P1 + P4); added cross-implementation agreement tests over `n ∈ [-20, 200]` and explicit negative-input tests. P1 12/12, P4 11/11 pass |
+| B-2 | P2 (test gap) | P3's corrected defects (inverted filter, tie-break instability, NaN USD, `toFixed()` precision, unknown blockchain) had no executable regression tests — typecheck only | Extracted pure logic to `src/problem3/src/lib/balances.ts`; `WalletPage` now consumes it; added 7 regression tests (`npm test`, `node --test` via tsx), one per corrected defect. 7/7 pass, typecheck green |
+| B-3 | P3 (docs) | P3 had no `test` script and README table understated its verification | Added `npm test` script + `@types/node`/`tsx` dev deps; updated root README and REVIEW.md |
+
+No P0 defects. All prior claims re-executed this pass: P1 12/12, P2 8/8 + build, P3 7/7 + typecheck, P4 11/11, P5 9/9 + typecheck — cross-problem regression clean.
+
 No P0/P1/P2 application defects were found. Earlier "implementation phase" claims were
 independently re-executed and confirmed.
 
 ## D. Metrics
 
 - Mandatory requirement pass rate: **23 / 23 = 100%** (scope: the 23 requirements listed in §A, all sourced from the official problem statements + explicit full-stack integration scope).
-- Acceptance tests: **69 / 69 executed passed** — automated suites 37 (P1: 9, P4: 11, P2: 8, P5: 9), API E2E journey 22 (`docs/audit-e2e-api.ps1`), UI E2E 10 (§B). 0 failures after the A-1 audit-tooling fix; the 3 transient failures were defects in the audit script, not the application.
+- Acceptance tests: **79 / 79 executed passed** — automated suites 47 (P1: 12, P4: 11, P3: 7, P2: 8, P5: 9), API E2E journey 22 (`docs/audit-e2e-api.ps1`), UI E2E 10 (§B). 0 failures after the A-1 audit-tooling fix; the 3 transient failures were defects in the audit script, not the application.
 - Failed tests: 0. Skipped: 0. Blocked: 0.
 - Code coverage: **not measured** — no coverage tooling configured in the challenge template; no number fabricated.
 - Build & type-check: all green (P2, P3, P4, P5).

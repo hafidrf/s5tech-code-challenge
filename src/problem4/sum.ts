@@ -11,7 +11,7 @@
 /**
  * a) Iterative loop.
  * Time O(n), Space O(1). Exact for every n whose result fits in a
- * Number.MAX_SAFE_INTEGER-bounded sum.
+ * Number.MAX_SAFE_INTEGER-bounded sum. Empty sum for n <= 0.
  */
 export function sum_to_n_a(n: number): number {
   let total = 0;
@@ -25,9 +25,12 @@ export function sum_to_n_a(n: number): number {
  * b) Gauss closed form: n * (n + 1) / 2.
  * Time O(1), Space O(1). Preferred: no loop, single multiplication
  * (the division by 2 keeps the intermediate product exact for the
- * documented input range).
+ * documented input range). Guarded for n <= 0 so all three
+ * implementations agree across the whole integer domain (the bare
+ * formula would return positive values for negative n).
  */
 export function sum_to_n_b(n: number): number {
+  if (n <= 0) return 0;
   return (n * (n + 1)) / 2;
 }
 

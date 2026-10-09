@@ -78,9 +78,9 @@ sequenceDiagram
 
 | Check | Command | Result |
 | --- | --- | --- |
-| Problem 1 tests | `node --test "src/problem1/*.test.js"` | 9/9 pass |
+| Problem 1 tests | `node --test "src/problem1/*.test.js"` | 12/12 pass (incl. cross-implementation agreement on the full integer domain) |
 | Problem 4 tests | `node --test "src/problem4/*.test.ts"` | 11/11 pass |
-| Problem 3 typecheck | `npm run typecheck` | pass |
+| Problem 3 typecheck + regression tests | `npm run typecheck && npm test` | pass (7/7 — one regression test per corrected defect) |
 | Problem 2 typecheck / tests / build | `npm run typecheck && npm test && npm run build` | pass (8/8 tests, production build OK) |
 | Problem 5 typecheck / tests | `npm run typecheck && npm test` | pass (9/9 API tests) |
 | Browser E2E | Vite dev + Express + SQLite | create → persist → list → filter → delete verified; offline fallback verified |

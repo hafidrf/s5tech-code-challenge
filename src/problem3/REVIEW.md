@@ -34,7 +34,7 @@ Reviewed code: the `WalletPage` component from the brief (React + TypeScript, fu
 
 ## Refactored version
 
-See [`src/WalletPage.tsx`](src/WalletPage.tsx) (compile-checked with `npm run typecheck` in this folder).
+See [`src/WalletPage.tsx`](src/WalletPage.tsx); the pure filter/sort/format logic is extracted to [`src/lib/balances.ts`](src/lib/balances.ts) so every corrected defect is covered by an executable regression test ([`src/lib/balances.test.ts`](src/lib/balances.test.ts), `npm test`). Typechecked with `npm run typecheck` in this folder.
 
 Key changes, mapped to the issues:
 

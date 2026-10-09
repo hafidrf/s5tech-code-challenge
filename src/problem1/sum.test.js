@@ -20,16 +20,25 @@ for (const [name, fn] of Object.entries(implementations)) {
 
   test(`${name}: edge cases`, () => {
     assert.equal(fn(0), 0); // empty sum
-    // Negative input: iterative/functional loops simply do not run;
-    // the closed form returns n*(n+1)/2 which is 0 for n = -1 and n = 0.
-    // All three agree for n >= 0, which is the documented domain.
-    assert.equal(fn(-5), fn(-5)); // no crash
+    // The brief says "any integer"; we define the empty-sum convention
+    // n <= 0 -> 0 and require ALL THREE implementations to agree on it.
+    assert.equal(fn(-1), 0);
+    assert.equal(fn(-5), 0);
+    assert.equal(fn(-1000), 0);
   });
 
   test(`${name}: agrees with the closed form on random samples`, () => {
     for (let i = 0; i < 200; i += 1) {
       const n = Math.floor(Math.random() * 10_000);
       assert.equal(fn(n), sum_to_n_b(n));
+    }
+  });
+
+  test(`${name}: cross-implementation agreement across the integer domain`, () => {
+    for (let n = -20; n <= 200; n += 1) {
+      assert.equal(fn(n), sum_to_n_b(n), `n=${n}`);
+      assert.equal(fn(n), sum_to_n_c(n), `n=${n}`);
+      assert.equal(fn(n), sum_to_n_a(n), `n=${n}`);
     }
   });
 }
