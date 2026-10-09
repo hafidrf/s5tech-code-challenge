@@ -1,0 +1,13 @@
+{
+  "name": "problem3-messy-react",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "react": "^19.0.0",
+    "typescript": "^5.7.2"
+  }
+}
