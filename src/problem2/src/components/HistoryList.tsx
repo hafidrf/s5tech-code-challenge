@@ -3,7 +3,7 @@ import type { SwapHistoryEntry } from '../api/swaps';
 
 export function HistoryList({ entries }: { entries: SwapHistoryEntry[] }) {
   if (entries.length === 0) {
-    return <p className="history__empty">No swaps yet — make one above.</p>;
+    return <p className="history__empty">No swaps yet; make one above.</p>;
   }
   return (
     <ul className="history">

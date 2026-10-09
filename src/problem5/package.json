@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "A Crude Server — ExpressJS + TypeScript CRUD API with SQLite persistence",
+  "description": "A Crude Server: ExpressJS + TypeScript CRUD API with SQLite persistence",
   "engines": {
     "node": ">=22.5.0"
   },

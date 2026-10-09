@@ -1,4 +1,4 @@
-/** Pure calculation helpers — kept UI-free so they are unit-testable. */
+/** Pure calculation helpers, kept UI-free so they are unit-testable. */
 
 export interface TokenPrice {
   currency: string;

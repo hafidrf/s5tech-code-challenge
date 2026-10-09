@@ -40,7 +40,7 @@ export default function App() {
       {loading && <p className="app__status">Loading token prices…</p>}
       {error && (
         <p className="app__status app__status--error" role="alert">
-          {error} — check your connection and reload.
+          {error}. Check your connection and reload.
         </p>
       )}
 

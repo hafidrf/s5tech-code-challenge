@@ -44,7 +44,7 @@ function writeLocal(entries: SwapHistoryEntry[]): void {
   try {
     localStorage.setItem(LOCAL_KEY, JSON.stringify(entries.slice(0, 50)));
   } catch {
-    /* storage full/blocked — history is best-effort */
+    /* storage full/blocked: history is best-effort */
   }
 }
 
@@ -59,7 +59,7 @@ export async function saveSwap(entry: NewSwap): Promise<SwapHistoryEntry> {
     if (res.ok) {
       return { ...(await res.json()), source: 'server' } as SwapHistoryEntry;
     }
-    // Server answered but rejected the payload — fall through to local save
+    // Server answered but rejected the payload: fall through to local save
     // rather than losing the user's swap.
   } catch {
     /* server unreachable */

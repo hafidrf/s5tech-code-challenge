@@ -1,6 +1,6 @@
-# Problem 5 — A Crude Server
+# Problem 5: A Crude Server
 
-CRUD REST API for **swap records**, built with **ExpressJS + TypeScript** and persisted to **SQLite** (via Node's built-in `node:sqlite` driver — no native compilation needed).
+CRUD REST API for **swap records**, built with **ExpressJS + TypeScript** and persisted to **SQLite** (via Node's built-in `node:sqlite` driver, no native compilation needed).
 
 ## Requirements covered
 
@@ -33,7 +33,7 @@ npm install
 | `PORT` | `4000` | HTTP port |
 | `DB_PATH` | `src/data/swaps.db` | SQLite file path (use `:memory:` for an ephemeral DB) |
 
-See [`.env.example`](.env.example) — load it with `node --env-file=.env dist/index.js` (no dotenv dependency needed on Node >= 20.6).
+See [`.env.example`](.env.example), load it with `node --env-file=.env dist/index.js` (no dotenv dependency needed on Node >= 20.6).
 
 ## Run
 
@@ -62,7 +62,7 @@ Errors always have the shape:
 
 Codes: `VALIDATION_ERROR` (400), `BAD_JSON` (400), `NOT_FOUND` (404), `INTERNAL_ERROR` (500).
 
-### `POST /api/swaps` — create
+### `POST /api/swaps`: create
 
 ```json
 {
@@ -76,7 +76,7 @@ Codes: `VALIDATION_ERROR` (400), `BAD_JSON` (400), `NOT_FOUND` (404), `INTERNAL_
 
 Returns `201` with the created record (server-generated `id`, `created_at`, `updated_at`).
 
-### `GET /api/swaps` — list with filters
+### `GET /api/swaps`: list with filters
 
 Query parameters (all optional):
 
@@ -114,6 +114,6 @@ Partial update: any subset of the create fields (`amount_to`/`rate` may be set b
 
 - **Resource model**: the brief says "a resource" without specifying one; modelled as currency **swap records** so the API is concrete and integrates with Problem 2 (the swap form).
 - **Database**: `node:sqlite` keeps `npm install` free of native build steps. SQL is standard SQLite; porting to `better-sqlite3` or Postgres is a driver swap plus placeholder-syntax tweak.
-- **Validation**: hand-rolled, centralised in `src/validation.ts` — the field set is small, so a schema library would be dead weight.
+- **Validation**: hand-rolled, centralised in `src/validation.ts`, the field set is small, so a schema library would be dead weight.
 - **Security**: request body size capped at 100 KB, `x-powered-by` disabled, CORS enabled (the Vite dev server runs on another origin), stack traces are never sent to clients (unknown errors log server-side and return a generic 500).
-- **Auth**: not implemented — not required by the brief.
+- **Auth**: not implemented, not required by the brief.

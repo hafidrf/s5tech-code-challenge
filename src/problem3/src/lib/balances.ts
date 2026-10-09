@@ -1,7 +1,7 @@
 /**
  * Pure wallet-balance logic extracted from WalletPage so every corrected
  * defect from ../REVIEW.md has an executable regression test.
- * No React imports here — this module is unit-testable with `node --test`.
+ * No React imports here: this module is unit-testable with `node --test`.
  */
 
 export interface WalletBalance {

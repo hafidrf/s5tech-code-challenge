@@ -68,7 +68,7 @@ test('regression #8: missing or invalid price yields usdValue null (never NaN)',
   assert.equal(priced[0]!.usdValue, 200);
 });
 
-test('regression #9: explicit fraction digits — 0.5 does not collapse to 0', () => {
+test('regression #9: explicit fraction digits, 0.5 does not collapse to 0', () => {
   const rows = formatBalances([B('Ethereum', 'ETH', 0.5)], {});
   assert.equal(rows[0]!.formatted, '0.5');
   assert.equal(formatBalances([B('Ethereum', 'ETH', 1.234567891234)], {})[0]!.formatted, '1.23456789');

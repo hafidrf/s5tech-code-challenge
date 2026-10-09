@@ -1,4 +1,4 @@
-# Requirements — 99Tech / S5Tech Code Challenge
+# Requirements: 99Tech / S5Tech Code Challenge
 
 ## Repository discovery
 
@@ -12,7 +12,7 @@
 | Branch | `main` |
 | Access limitations | Notion database views (Frontend/Backend/Fullstack tabs) could not be rendered headlessly (rate-limited SPA). Problem statements were cross-verified from candidate mirrors that preserve the original `CHALLENGE.md` text (e.g. `tannguyen-nm/99tech-code-challenge`); all statements are consistent with the official repo skeleton (`src/problem1..problem5`) plus the "Architecture" problem referenced by backend/fullstack candidates. |
 
-The two Code Challenge streak links resolve (302) to the same canonical Notion page — no duplication.
+The two Code Challenge streak links resolve (302) to the same canonical Notion page, no duplication.
 
 ## Official problems
 
@@ -23,7 +23,7 @@ The two Code Challenge streak links resolve (302) to the same canonical Notion p
 | P3 | Messy React (code review) | Frontend | `src/problem3/` |
 | P4 | Three ways to sum to n (TypeScript) | Backend / Fullstack | `src/problem4/` |
 | P5 | A Crude Server (CRUD + persistence) | Backend / Fullstack | `src/problem5/` |
-| P6 | Architecture (scoreboard module spec) | Backend / Fullstack | — (spec only) |
+| P6 | Architecture (scoreboard module spec) | Backend / Fullstack | (spec only) |
 
 Role guidance from the assessment: frontend applicants solve P1–P3; backend applicants solve P4–P6. This submission covers **all six** (full-stack).
 

@@ -5,12 +5,12 @@
  * - WalletBalance.blockchain added to the interface (issue 2).
  * - Priority table + filtering/sorting/formatting extracted to
  *   lib/balances.ts, outside the component (issues 3-typo, 5, 7, 8, 9,
- *   10, 13) — each corrected defect has a regression test in
+ *   10, 13): each corrected defect has a regression test in
  *   lib/balances.test.ts.
  * - One memo with correct dependencies (issues 4, 6, 11).
  * - Stable keys instead of the array index (issue 12).
  * - Explicit prop types; hooks stay at the app level and feed props in
- *   (issues 14, 15 — keeps this component trivially testable).
+ *   (issues 14, 15: keeps this component trivially testable).
  */
 import React from 'react';
 import {
@@ -47,7 +47,7 @@ function WalletRow({ balance }: WalletRowProps): React.ReactElement {
 
 export interface WalletPageProps {
   balances: WalletBalance[];
-  /** Map of currency ticker -> USD price. Missing tickers are rendered as "—". */
+  /** Map of currency ticker -> USD price. Missing tickers render a dash placeholder. */
   prices: Record<string, number>;
 }
 

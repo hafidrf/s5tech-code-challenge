@@ -1,6 +1,6 @@
 import type { CreateSwapInput, ListFilters, UpdateSwapInput } from './types.js';
 
-/** Small hand-rolled validator: one resource, a handful of fields — no schema library needed. */
+/** Small hand-rolled validator: one resource, a handful of fields, no schema library needed. */
 
 const TOKEN_RE = /^[A-Z0-9]{2,12}$/;
 const ISO_DATE_RE = /^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}(:\d{2}(\.\d{1,3})?)?(Z|[+-]\d{2}:\d{2})?)?$/;

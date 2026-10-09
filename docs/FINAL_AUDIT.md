@@ -1,8 +1,8 @@
-# Final Audit — 99Tech / S5Tech Code Challenge
+# Final Audit: 99Tech / S5Tech Code Challenge
 
 Independent audit of the submission in this repository against the official assessment
 sources (Code Challenge page + FE/BE role pages on Notion, starter repo
-`99techteam/code-challenge`). All results below were produced by executing the checks —
+`99techteam/code-challenge`). All results below were produced by executing the checks,
 not by trusting earlier reports.
 
 - Date: 2026-10-09
@@ -58,7 +58,7 @@ Statuses: **PASS** (implemented + verified by execution), **FAIL**, **BLOCKED**,
 | P5 production build + boot | `npm run build` → `node dist/index.js` | PASS (health 200 on :4100) |
 | API E2E journey (isolated temp DB) | `docs/audit-e2e-api.ps1` | PASS 22/22 |
 | Restart persistence | kill server → boot `dist` on same DB → `GET /api/swaps/6` | PASS (row intact) |
-| UI E2E (Vite + Express + SQLite) | browser automation | PASS — see §C |
+| UI E2E (Vite + Express + SQLite) | browser automation | PASS, see §C |
 | Dependency audit (runtime) | `npm audit --omit=dev` (P2, P5) | PASS 0 vulnerabilities |
 | Secret scan | `git grep` for key/private-key patterns | PASS no matches |
 | Lint / formatting | N/A | no linter configured in the official template or solutions (documented limitation) |
@@ -83,19 +83,38 @@ Statuses: **PASS** (implemented + verified by execution), **FAIL**, **BLOCKED**,
 
 | ID | Severity | Finding | Resolution |
 | --- | --- | --- | --- |
-| A-1 | P3 (tooling) | Audit script could not read error bodies under PowerShell 7 (`HttpResponseMessage` has no `GetResponseStream`) — produced 3 false FAILs | Fixed audit script to prefer `$_.ErrorDetails.Message`; re-run 22/22. **Not an application defect.** |
-| A-2 | P3 (false positive) | Suspected dev SQLite files were committed; verified with `git ls-files` + `git check-ignore` that they were never tracked and are ignored by `src/problem5/.gitignore` | No action needed — recorded to prevent re-litigation |
+| A-1 | P3 (tooling) | Audit script could not read error bodies under PowerShell 7 (`HttpResponseMessage` has no `GetResponseStream`), produced 3 false FAILs | Fixed audit script to prefer `$_.ErrorDetails.Message`; re-run 22/22. **Not an application defect.** |
+| A-2 | P3 (false positive) | Suspected dev SQLite files were committed; verified with `git ls-files` + `git check-ignore` that they were never tracked and are ignored by `src/problem5/.gitignore` | No action needed, recorded to prevent re-litigation |
 | A-3 | P3 (docs) | No `.env.example` for the backend | Added `src/problem5/.env.example` (+ README pointer); P5 typecheck & tests re-run green |
 
-### Addendum — six-problem completion pass (same day)
+### Addendum: six-problem completion pass (same day)
 
 | ID | Severity | Finding | Resolution |
 | --- | --- | --- | --- |
 | B-1 | P2 (correctness vs spec) | P1/P4 spec says input is "any integer", but the three implementations disagreed for `n < 0` (closed form returned positive values, loops returned 0). Cross-implementation agreement was only documented for `n >= 0` | Adopted the empty-sum convention `n <= 0 → 0` in all three implementations (P1 + P4); added cross-implementation agreement tests over `n ∈ [-20, 200]` and explicit negative-input tests. P1 12/12, P4 11/11 pass |
-| B-2 | P2 (test gap) | P3's corrected defects (inverted filter, tie-break instability, NaN USD, `toFixed()` precision, unknown blockchain) had no executable regression tests — typecheck only | Extracted pure logic to `src/problem3/src/lib/balances.ts`; `WalletPage` now consumes it; added 7 regression tests (`npm test`, `node --test` via tsx), one per corrected defect. 7/7 pass, typecheck green |
+| B-2 | P2 (test gap) | P3's corrected defects (inverted filter, tie-break instability, NaN USD, `toFixed()` precision, unknown blockchain) had no executable regression tests, typecheck only | Extracted pure logic to `src/problem3/src/lib/balances.ts`; `WalletPage` now consumes it; added 7 regression tests (`npm test`, `node --test` via tsx), one per corrected defect. 7/7 pass, typecheck green |
 | B-3 | P3 (docs) | P3 had no `test` script and README table understated its verification | Added `npm test` script + `@types/node`/`tsx` dev deps; updated root README and REVIEW.md |
 
-No P0 defects. All prior claims re-executed this pass: P1 12/12, P2 8/8 + build, P3 7/7 + typecheck, P4 11/11, P5 9/9 + typecheck — cross-problem regression clean.
+### Addendum: Problem 6 audit and punctuation pass (same day)
+
+Deliverable classification first: the official Problem 6 task asks for a module
+specification (README documentation), an execution-flow diagram, and improvement
+comments, addressed to a backend team that will implement it. It does not ask for
+code, so `src/problem6/` correctly contains documentation only. All four mandatory
+deliverables from the brief (§1 mapping table, §3-§4 design and security, §5 Mermaid
+diagram, §8 improvements) are present; statuses R17-R20 in `docs/REQUIREMENTS.md`
+remain PASS with the checks below re-run.
+
+| ID | Severity | Finding | Resolution |
+| --- | --- | --- | --- |
+| C-1 | P2 (technical accuracy) | §3.1 step 3 claimed the `UPDATE users` and `ZINCRBY leaderboard` happen in one transaction. Redis cannot join a Postgres transaction; the diagram also showed `ZINCRBY` before `COMMIT`, contradicting the fan-out step's "post-commit" wording | Rewrote steps 2-6: idempotency insert + score update commit first, `ZINCRBY` runs after commit with the §3.2 rebuild path as repair, fan-out relayed via outbox. Diagram reordered to match (COMMIT before ZINCRBY). Mermaid syntax re-validated with the rendering tool |
+| C-2 | P3 (punctuation rule) | U+2014 em dashes appeared in 20 tracked files (docs, READMEs, comments, UI copy) | Replaced with commas/colons/semicolons across all markdown, comments, and UI strings. Remaining occurrences: 7 functional literals (the "no value" placeholder returned by `formatTokenAmount`/`formatUsd`, rendered by `TokenSelect`/`WalletPage`, asserted in `rates.test.ts`). Changing those would alter program behavior and its tests, which the brief forbids, so they are preserved as a documented exception |
+| C-3 | P3 (tooling) | Global markdown replace produced awkward heading punctuation ("Problem 5, A Crude Server") | Converted title-style separators to colons in 15 headings across 6 files |
+
+Regression after the punctuation pass (comments and UI copy only, no logic changed):
+P1 12/12, P2 8/8 + typecheck, P3 7/7 + typecheck, P4 11/11, P5 9/9 + typecheck.
+
+No P0 defects. All prior claims re-executed this pass: P1 12/12, P2 8/8 + build, P3 7/7 + typecheck, P4 11/11, P5 9/9 + typecheck, cross-problem regression clean.
 
 No P0/P1/P2 application defects were found. Earlier "implementation phase" claims were
 independently re-executed and confirmed.
@@ -103,23 +122,23 @@ independently re-executed and confirmed.
 ## D. Metrics
 
 - Mandatory requirement pass rate: **23 / 23 = 100%** (scope: the 23 requirements listed in §A, all sourced from the official problem statements + explicit full-stack integration scope).
-- Acceptance tests: **79 / 79 executed passed** — automated suites 47 (P1: 12, P4: 11, P3: 7, P2: 8, P5: 9), API E2E journey 22 (`docs/audit-e2e-api.ps1`), UI E2E 10 (§B). 0 failures after the A-1 audit-tooling fix; the 3 transient failures were defects in the audit script, not the application.
+- Acceptance tests: **79 / 79 executed passed**, automated suites 47 (P1: 12, P4: 11, P3: 7, P2: 8, P5: 9), API E2E journey 22 (`docs/audit-e2e-api.ps1`), UI E2E 10 (§B). 0 failures after the A-1 audit-tooling fix; the 3 transient failures were defects in the audit script, not the application.
 - Failed tests: 0. Skipped: 0. Blocked: 0.
-- Code coverage: **not measured** — no coverage tooling configured in the challenge template; no number fabricated.
+- Code coverage: **not measured**, no coverage tooling configured in the challenge template; no number fabricated.
 - Build & type-check: all green (P2, P3, P4, P5).
 - E2E verification: full-stack flow verified on real running app with isolated temp DB.
 
 ## E. Remaining risks / limitations (documented, non-blocking)
 
 1. **Notion per-tab problem views** could not be rendered headless (SPA + 429); problem statements were cross-verified against candidate mirrors preserving the original `CHALLENGE.md` text and the official repo skeleton. Reviewer should treat statement fidelity as high-confidence but not pixel-perfect.
-2. **CORS is wide open (`*`)** on the API — deliberate for the dev-proxy setup, documented in `src/problem5/README.md`. No credentials are used; acceptable for a challenge, not for production.
+2. **CORS is wide open (`*`)** on the API, deliberate for the dev-proxy setup, documented in `src/problem5/README.md`. No credentials are used; acceptable for a challenge, not for production.
 3. **`node:sqlite` is an experimental Node API** (warning on boot). File format is standard SQLite; migration path documented.
 4. **Offline fallback swallows server rejections**: if the API answers 4xx/5xx (not just unreachable), P2 falls back to local save rather than surfacing the server error. Documented in code; chosen to never lose a user's swap.
 5. **No linter/formatter** configured (none existed in the official template); typecheck strictness (`strict`, `noUncheckedIndexedAccess`) partially compensates.
-6. No authentication/authorization — not required by any official problem.
+6. No authentication/authorization, not required by any official problem.
 
 ## F. Final verdict
 
-**READY WITH DOCUMENTED LIMITATIONS** — every applicable mandatory requirement passed
+**READY WITH DOCUMENTED LIMITATIONS**, every applicable mandatory requirement passed
 execution-backed verification; the limitations in §E are environment/scope notes, none
 affect a mandatory requirement.

@@ -43,7 +43,7 @@ export function createApp(db: Db): express.Express {
     res.json({ status: 'ok' });
   });
 
-  // POST /api/swaps — create a swap record
+  // POST /api/swaps: create a swap record
   app.post(
     '/api/swaps',
     wrap((req, res) => {
@@ -76,7 +76,7 @@ export function createApp(db: Db): express.Express {
     }),
   );
 
-  // PATCH /api/swaps/:id — partial update
+  // PATCH /api/swaps/:id: partial update
   app.patch(
     '/api/swaps/:id',
     wrap((req, res) => {
