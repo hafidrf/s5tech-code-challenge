@@ -33,6 +33,8 @@ npm install
 | `PORT` | `4000` | HTTP port |
 | `DB_PATH` | `src/data/swaps.db` | SQLite file path (use `:memory:` for an ephemeral DB) |
 
+See [`.env.example`](.env.example) — load it with `node --env-file=.env dist/index.js` (no dotenv dependency needed on Node >= 20.6).
+
 ## Run
 
 ```bash

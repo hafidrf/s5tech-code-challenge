@@ -69,6 +69,7 @@ sequenceDiagram
 ## Documentation
 
 - [`docs/REQUIREMENTS.md`](docs/REQUIREMENTS.md) — repository discovery, requirement matrix, assumptions
+- [`docs/FINAL_AUDIT.md`](docs/FINAL_AUDIT.md) — independent final audit: compliance matrix, E2E evidence, verdict
 - [`src/problem3/REVIEW.md`](src/problem3/REVIEW.md) — Messy React findings (16 issues)
 - [`src/problem5/README.md`](src/problem5/README.md) — full API contract
 - [`src/problem6/README.md`](src/problem6/README.md) — live scoreboard module specification
