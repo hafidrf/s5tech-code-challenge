@@ -39,7 +39,7 @@ function WalletRow({ balance }: WalletRowProps): React.ReactElement {
       </span>
       <span className="wallet-row__amount">{balance.formatted}</span>
       <span className="wallet-row__usd">
-        {balance.usdValue === null ? '—' : usdFormatter.format(balance.usdValue)}
+        {balance.usdValue === null ? '-' : usdFormatter.format(balance.usdValue)}
       </span>
     </div>
   );

@@ -36,11 +36,10 @@ export function sum_to_n_b(n: number): number {
 
 /**
  * c) Tail-recursive accumulator.
- * Time O(n), Space O(n) call-stack frames before tail-call optimisation
- * (ESNext TCO is not implemented in V8, so deep n will throw a stack
- * overflow (ESNext TCO is not implemented in V8). Included as a distinct
- * third approach per the brief; the closed form is recommended for
- * production use.
+ * Time O(n), Space O(n) call-stack frames before tail-call optimisation.
+ * ESNext TCO is not implemented in V8, so deep n will throw a stack
+ * overflow. Included as a distinct third approach per the brief; the
+ * closed form is recommended for production use.
  */
 export function sum_to_n_c(n: number): number {
   const go = (i: number, acc: number): number =>

@@ -48,14 +48,14 @@ export function convert(amountFrom: number, rate: number | null): number | null 
 
 /** Human-friendly token amount: trims trailing zeros, caps fraction digits. */
 export function formatTokenAmount(value: number): string {
-  if (!Number.isFinite(value)) return '—';
+  if (!Number.isFinite(value)) return '-';
   const abs = Math.abs(value);
   const maximumFractionDigits = abs >= 1000 ? 2 : abs >= 1 ? 4 : 8;
   return new Intl.NumberFormat('en-US', { maximumFractionDigits }).format(value);
 }
 
 export function formatUsd(value: number | null): string {
-  if (value === null || !Number.isFinite(value)) return '—';
+  if (value === null || !Number.isFinite(value)) return '-';
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
