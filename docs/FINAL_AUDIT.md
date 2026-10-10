@@ -108,21 +108,42 @@ remain PASS with the checks below re-run.
 | ID | Severity | Finding | Resolution |
 | --- | --- | --- | --- |
 | C-1 | P2 (technical accuracy) | §3.1 step 3 claimed the `UPDATE users` and `ZINCRBY leaderboard` happen in one transaction. Redis cannot join a Postgres transaction; the diagram also showed `ZINCRBY` before `COMMIT`, contradicting the fan-out step's "post-commit" wording | Rewrote steps 2-6: idempotency insert + score update commit first, `ZINCRBY` runs after commit with the §3.2 rebuild path as repair, fan-out relayed via outbox. Diagram reordered to match (COMMIT before ZINCRBY). Mermaid syntax re-validated with the rendering tool |
-| C-2 | P3 (punctuation rule) | U+2014 em dashes appeared in 20 tracked files (docs, READMEs, comments, UI copy) | Replaced with commas/colons/semicolons across all markdown, comments, and UI strings. Remaining occurrences: 7 functional literals (the "no value" placeholder returned by `formatTokenAmount`/`formatUsd`, rendered by `TokenSelect`/`WalletPage`, asserted in `rates.test.ts`). Changing those would alter program behavior and its tests, which the brief forbids, so they are preserved as a documented exception |
+| C-2 | P3 (punctuation rule) | U+2014 em dashes appeared in 20 tracked files (docs, READMEs, comments, UI copy) | Replaced with commas/colons/semicolons across all markdown, comments, and UI strings. The 7 remaining functional literals (the "no value" placeholder in `formatTokenAmount`/`formatUsd`, rendered by `TokenSelect`/`WalletPage`, asserted in `rates.test.ts`) plus one comment occurrence in `.env.example` were later switched to the plain hyphen placeholder `-` in the final cleanup pass, with the test expectations updated to match. Repository-wide scan now returns zero U+2014 occurrences |
 | C-3 | P3 (tooling) | Global markdown replace produced awkward heading punctuation ("Problem 5, A Crude Server") | Converted title-style separators to colons in 15 headings across 6 files |
 
 Regression after the punctuation pass (comments and UI copy only, no logic changed):
 P1 12/12, P2 8/8 + typecheck, P3 7/7 + typecheck, P4 11/11, P5 9/9 + typecheck.
 
-No P0 defects. All prior claims re-executed this pass: P1 12/12, P2 8/8 + build, P3 7/7 + typecheck, P4 11/11, P5 9/9 + typecheck, cross-problem regression clean.
+### Addendum: independent re-verification pass (2026-10-10)
 
-No P0/P1/P2 application defects were found. Earlier "implementation phase" claims were
-independently re-executed and confirmed.
+This pass re-opened the official Notion problem database in an interactive browser
+(all four tabs rendered this time: Frontend = P1-P3, Backend = P4-P6,
+Fullstack = P2/P4/P5/P6) and read the verbatim task text for P1, P2, P5, and P6
+from the official side-peek panels. All four matched the statements the solutions
+were built against. P3 and P4 remain sourced from the candidate mirror whose
+fidelity is established by the 4/4 verbatim match above.
+
+One additional defect was found and fixed during the implementation inspection:
+
+| ID | Severity | Finding | Resolution |
+| --- | --- | --- | --- |
+| D-1 | P3 (docs) | `src/problem4/sum.ts` comment for `sum_to_n_c` contained a duplicated, self-interrupting clause ("...throw a stack overflow (ESNext TCO is not implemented in V8). Included..."), an artifact of the earlier em-dash replacement | Rewrote the JSDoc to a single clean sentence. Comment only, no behavior change; P4 tests re-run 11/11 |
+
+Re-executed from scratch in the real environment this pass:
+automated suites P1 12/12, P2 8/8 + typecheck + build, P3 7/7 + typecheck,
+P4 11/11, P5 9/9 + typecheck + build; API E2E 22/22 against the compiled
+`dist/index.js` on an isolated temp database; persistence across a full process
+restart confirmed; UI E2E in a real browser: form render, live price load,
+ETH-to-WBTC conversion (1.25 to 0.079, about $2,057), create persisted as DB
+id=4, invalid input blocked with no POST emitted, offline fallback to
+localStorage with a `local` badge. Browser console showed only the expected
+proxy 500 errors while the backend was intentionally stopped. Secret scan and
+U+2014 scan (56 non-binary files) both clean.
 
 ## D. Metrics
 
 - Mandatory requirement pass rate: **23 / 23 = 100%** (scope: the 23 requirements listed in §A, all sourced from the official problem statements + explicit full-stack integration scope).
-- Acceptance tests: **79 / 79 executed passed**, automated suites 47 (P1: 12, P4: 11, P3: 7, P2: 8, P5: 9), API E2E journey 22 (`docs/audit-e2e-api.ps1`), UI E2E 10 (§B). 0 failures after the A-1 audit-tooling fix; the 3 transient failures were defects in the audit script, not the application.
+- Acceptance tests: **79 / 79 executed passed**, automated suites 47 (P1: 12, P4: 11, P3: 7, P2: 8, P5: 9), API E2E journey 22 (`docs/audit-e2e-api.ps1`), UI E2E 10. 0 failures. The API E2E and UI E2E journeys are single end-to-end scenarios containing 22 and 10 assertions respectively; they are counted as individual assertion results, not as one test each.
 - Failed tests: 0. Skipped: 0. Blocked: 0.
 - Code coverage: **not measured**, no coverage tooling configured in the challenge template; no number fabricated.
 - Build & type-check: all green (P2, P3, P4, P5).
