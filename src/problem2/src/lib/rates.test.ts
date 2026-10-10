@@ -55,15 +55,15 @@ test('convert: multiplies, guards bad input', () => {
 
 test('formatUsd: formats and guards null', () => {
   assert.equal(formatUsd(1234.5), '$1,234.50');
-  assert.equal(formatUsd(null), '—');
-  assert.equal(formatUsd(Number.POSITIVE_INFINITY), '—');
+  assert.equal(formatUsd(null), '-');
+  assert.equal(formatUsd(Number.POSITIVE_INFINITY), '-');
 });
 
 test('formatTokenAmount: scales fraction digits with magnitude', () => {
   assert.equal(formatTokenAmount(1500.123456), '1,500.12');
   assert.equal(formatTokenAmount(1.234567891), '1.2346');
   assert.equal(formatTokenAmount(0.0000123456789), '0.00001235');
-  assert.equal(formatTokenAmount(Number.NaN), '—');
+  assert.equal(formatTokenAmount(Number.NaN), '-');
 });
 
 test('validateAmount: empty, non-numeric, non-positive, oversized', () => {

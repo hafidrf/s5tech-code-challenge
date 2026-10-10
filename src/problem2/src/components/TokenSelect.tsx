@@ -36,7 +36,7 @@ export function TokenSelect({
           ))}
         </select>
         <span className="token-select__price">
-          {prices.has(value) ? `$${prices.get(value)!.price.toLocaleString('en-US')}` : '—'}
+          {prices.has(value) ? `$${prices.get(value)!.price.toLocaleString('en-US')}` : '-'}
         </span>
       </span>
     </label>
